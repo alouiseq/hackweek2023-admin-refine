@@ -78,27 +78,6 @@ function App() {
         data: data?.data,
       };
     },
-    update: async ({ resource, id, variables }) => {
-      let apiUrl = baseApiUrl;
-      switch (resource) {
-        case "programs":
-        case "program_cohorts":
-        case "cohorts":
-        case "courses":
-        case "academic_partners":
-        case "recurly_skus":
-        case "instructors":
-          apiUrl = inventoryApiUrl;
-          break;
-        default:
-          apiUrl = baseApiUrl;
-      }
-      const { data } = await axios.put(apiUrl, variables);
-
-      return {
-        data: data?.data,
-      };
-    },
     getOne: async ({ resource, id }) => {
       let apiUrl = baseApiUrl;
       switch (resource) {
@@ -115,6 +94,51 @@ function App() {
           apiUrl = baseApiUrl;
       }
       const { data } = await axios.get(`${apiUrl}/${resource}/${id}`);
+
+      return {
+        data: data?.data,
+      };
+    },
+    create: async ({ resource, variables }) => {
+      let apiUrl = baseApiUrl;
+      switch (resource) {
+        case "programs":
+        case "program_cohorts":
+        case "cohorts":
+        case "courses":
+        case "academic_partners":
+        case "recurly_skus":
+        case "instructors":
+          apiUrl = inventoryApiUrl;
+          break;
+        default:
+          apiUrl = baseApiUrl;
+      }
+      const { data } = await axios.post(`${apiUrl}/${resource}`, variables);
+
+      return {
+        data: data?.data,
+      };
+    },
+    update: async ({ resource, id, variables }) => {
+      let apiUrl = baseApiUrl;
+      switch (resource) {
+        case "programs":
+        case "program_cohorts":
+        case "cohorts":
+        case "courses":
+        case "academic_partners":
+        case "recurly_skus":
+        case "instructors":
+          apiUrl = inventoryApiUrl;
+          break;
+        default:
+          apiUrl = baseApiUrl;
+      }
+      const { data } = await axios.put(
+        `${apiUrl}/${resource}/${id}`,
+        variables
+      );
 
       return {
         data: data?.data,
