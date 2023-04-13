@@ -50,15 +50,16 @@ export const Header = () => {
 
   const { refetch: refetchContacts } = useList({
     resource: "contacts",
-    filters: [
-      // { field: "first_name", operator: "contains", value },
-      { field: "first_name", operator: "contains", value },
-    ],
+    filters: [{ field: "search", operator: "contains", value }],
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
         const contactOptionGroup = data.data.map((item) =>
-          renderItem(item.first_name, "contacts", item.id)
+          renderItem(
+            `${item.first_name} ${item.last_name} - ${item.email}`,
+            "contacts",
+            item.id
+          )
         );
         if (contactOptionGroup.length > 0) {
           setOptions([
@@ -74,12 +75,12 @@ export const Header = () => {
 
   const { refetch: refetchStudents } = useList({
     resource: "students",
-    config: { filters: [{ field: "name", operator: "contains", value }] },
+    filters: [{ field: "name_or_email", operator: "contains", value }],
     queryOptions: {
       enabled: false,
       onSuccess: (data) => {
         const studentOptionGroup = data.data.map((item) =>
-          renderItem(item.name, "students", item.id)
+          renderItem(`${item.name} - ${item.email}`, "students", item.id)
         );
         if (studentOptionGroup.length > 0) {
           setOptions([
@@ -93,10 +94,76 @@ export const Header = () => {
     },
   });
 
+  const { refetch: refetchPrograms } = useList({
+    resource: "programs",
+    filters: [{ field: "search", operator: "contains", value }],
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        const programOptionGroup = data.data.map((item) =>
+          renderItem(`${item.name}`, "programs", item.id)
+        );
+        if (programOptionGroup.length > 0) {
+          setOptions([
+            {
+              label: renderTitle("Programs"),
+              options: programOptionGroup,
+            },
+          ]);
+        }
+      },
+    },
+  });
+
+  const { refetch: refetchProgramCohorts } = useList({
+    resource: "program_cohorts",
+    filters: [{ field: "search", operator: "contains", value }],
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        const programCohortOptionGroup = data.data.map((item) =>
+          renderItem(`${item.program?.name}`, "program_cohorts", item.id)
+        );
+        if (programCohortOptionGroup.length > 0) {
+          setOptions([
+            {
+              label: renderTitle("ProgramCohorts"),
+              options: programCohortOptionGroup,
+            },
+          ]);
+        }
+      },
+    },
+  });
+
+  const { refetch: refetchCourses } = useList({
+    resource: "courses",
+    filters: [{ field: "search_text", operator: "contains", value }],
+    queryOptions: {
+      enabled: false,
+      onSuccess: (data) => {
+        const courseOptionGroup = data.data.map((item) =>
+          renderItem(`${item.title}`, "courses", item.id)
+        );
+        if (courseOptionGroup.length > 0) {
+          setOptions([
+            {
+              label: renderTitle("Courses"),
+              options: courseOptionGroup,
+            },
+          ]);
+        }
+      },
+    },
+  });
+
   useEffect(() => {
     setOptions([]);
     refetchContacts();
-    // refetchStudents();
+    refetchStudents();
+    refetchPrograms();
+    refetchProgramCohorts();
+    refetchCourses();
   }, [value]);
 
   return (

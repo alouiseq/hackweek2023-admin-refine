@@ -90,29 +90,10 @@ function App() {
           apiUrl = baseApiUrl;
       }
 
-      // const { current = 1, pageSize = 20 } = pagination ?? {};
-
-      // const query = {
-      //   page: current,
-      //   page_size: current * pageSize,
-      // };
-
-      // if (sorters && sorters.length > 0) {
-      //   query._sort = sorters[0].field;
-      //   query._order = sorters[0].order;
-      // }
-
-      // const queryFilters = generateFilters(filters);
-      // const { data } = await axios.get(
-      // `${apiUrl}/${resource}?${stringify(query)}${stringify(queryFilters)}`
-      //   `${apiUrl}/${resource}?${stringify(query)}`
-      // );
-
-      // const { data } = await axios.get(`${apiUrl}/${resource}`);
-
       let finalApiUrl = `${apiUrl}/${resource}`;
-      if (filters && filters.length && filters[0].value) {
-        const queryFilters = { search: filters[0].value };
+      const searchValue = filters && filters.length && filters[0].value;
+      if (searchValue) {
+        const queryFilters = { [filters[0].field]: searchValue };
         finalApiUrl = `${finalApiUrl}?${stringify(queryFilters)}`;
       }
       const { data } = await axios.get(finalApiUrl);
