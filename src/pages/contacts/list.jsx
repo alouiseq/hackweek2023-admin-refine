@@ -10,6 +10,7 @@ export const ContactList = () => {
     syncWithLocation: true,
   });
 
+  debugger;
   return (
     <List>
       <Table {...tableProps} rowKey="id">

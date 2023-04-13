@@ -13,6 +13,7 @@ import routerBindings, {
 } from "@refinedev/react-router-v6";
 import dataProvider from "@refinedev/simple-rest";
 import { AntdInferencer } from "@refinedev/inferencer/antd";
+import { stringify } from "query-string";
 import "@refinedev/antd/dist/reset.css";
 
 import { ColorModeContextProvider } from "./contexts/color-mode";
@@ -24,6 +25,39 @@ import {
   ContactEdit,
   ContactShow,
 } from "pages/contactsInferred";
+// } from "pages/contacts";
+
+// const mapOperator = (operator) => {
+//   switch (operator) {
+//     case "ne":
+//     case "gte":
+//     case "lte":
+//       return `_${operator}`;
+//     case "contains":
+//       return "_like";
+//     case "eq":
+//     default:
+//       return "";
+//   }
+// };
+
+// const generateFilters = (filters) => {
+//   const queryFilters = {};
+
+//   filters?.map((filter) => {
+//     if ("field" in filter) {
+//       const { field, operator, value } = filter;
+//       const mappedOperator = mapOperator(operator);
+//       queryFilters[`${field}${mappedOperator}`] = value;
+//     }
+//   });
+
+//   return queryFilters;
+// };
+
+// const generateFilters = (filters) => {
+//   return filters[0].value ? `&${{ search: filters[0].value }}` : "";
+// };
 
 function App() {
   // const apiUrl = "http://localhost:4001/admin";
@@ -34,7 +68,7 @@ function App() {
   const simpleRestProvider = dataProvider(baseApiUrl);
   const myDataProvider = {
     ...simpleRestProvider,
-    getList: async ({ resource }) => {
+    getList: async ({ resource, sorters, pagination, filters }) => {
       let apiUrl = baseApiUrl;
       switch (resource) {
         case "programs":
@@ -55,7 +89,33 @@ function App() {
         default:
           apiUrl = baseApiUrl;
       }
-      const { data } = await axios.get(`${apiUrl}/${resource}`);
+
+      // const { current = 1, pageSize = 20 } = pagination ?? {};
+
+      // const query = {
+      //   page: current,
+      //   page_size: current * pageSize,
+      // };
+
+      // if (sorters && sorters.length > 0) {
+      //   query._sort = sorters[0].field;
+      //   query._order = sorters[0].order;
+      // }
+
+      // const queryFilters = generateFilters(filters);
+      // const { data } = await axios.get(
+      // `${apiUrl}/${resource}?${stringify(query)}${stringify(queryFilters)}`
+      //   `${apiUrl}/${resource}?${stringify(query)}`
+      // );
+
+      // const { data } = await axios.get(`${apiUrl}/${resource}`);
+
+      let finalApiUrl = `${apiUrl}/${resource}`;
+      if (filters && filters.length && filters[0].value) {
+        const queryFilters = { search: filters[0].value };
+        finalApiUrl = `${finalApiUrl}?${stringify(queryFilters)}`;
+      }
+      const { data } = await axios.get(finalApiUrl);
 
       return {
         data: data?.data,
