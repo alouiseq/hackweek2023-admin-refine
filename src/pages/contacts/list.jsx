@@ -45,14 +45,6 @@ export const ContactList = () => {
     action: "create",
   });
 
-  // // Edit Modal
-  // const { show: editModalShow } = useModalForm({
-  //   action: "edit",
-  //   warnWhenUnsavedChanges: true,
-  // });
-
-  // Show Modal
-  // const [visibleShowModal, setVisibleShowModal] = useState(false);
   const [visibleShowDrawer, setVisibleShowDrawer] = useState(false);
 
   const { queryResult, setShowId, showId } = useShow();
@@ -114,19 +106,13 @@ export const ContactList = () => {
             dataIndex="actions"
             render={(_, record) => (
               <Space>
-                <EditButton
-                  hideText
-                  size="small"
-                  recordItemId={record.id}
-                  // onClick={() => editModalShow(record.id)}
-                />
+                <EditButton hideText size="small" recordItemId={record.id} />
                 <ShowButton
                   hideText
                   size="small"
                   recordItemId={record.id}
                   onClick={() => {
                     setShowId(record.id);
-                    // setVisibleShowModal(true);
                     setVisibleShowDrawer(true);
                   }}
                 />
@@ -135,16 +121,7 @@ export const ContactList = () => {
                   target="_blank"
                   rel="noreferrer"
                 >
-                  <Button
-                    type="primary"
-                    ghost
-                    // icon={
-                    //   <Image
-                    //     src="/images/ac_mark-white-bluebg.svg"
-                    //     alt="activecampaign logo"
-                    //   />
-                    // }
-                  >
+                  <Button type="primary" ghost>
                     &nbsp;ActiveCampaign...
                   </Button>
                 </a>

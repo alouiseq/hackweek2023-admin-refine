@@ -27,9 +27,10 @@ import {
   ContactList,
   ContactCreate,
   ContactEdit,
+  // ContactEditOg as ContactEdit,
   ContactShow,
-  // } from "pages/contactsInferred";
-} from "pages/contacts";
+} from "pages/contactsInferred";
+// } from "pages/contacts";
 
 function App() {
   const [customTheme, setCustomTheme] = useState({

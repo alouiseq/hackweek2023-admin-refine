@@ -4,7 +4,6 @@ import { Form, Input, Switch } from "antd";
 
 export const ContactEdit = () => {
   const { formProps, saveButtonProps } = useForm();
-  // const contactsData = queryResult?.data?.data;
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
